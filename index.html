@@ -51,94 +51,122 @@
                 </button>
 
                 <!-- Tombol Pengaturan API Key -->
-                <button @click="openModalKey = true" class="flex items-center space-x-2 text-xs sm:text-sm bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-3.5 py-2 rounded-xl font-medium transition border border-slate-200 dark:border-slate-600">
+                <button @click="openModalKey = true" class="flex items-center space-x-2 text-xs sm:text-sm bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-3 py-2 rounded-xl font-medium transition border border-slate-200 dark:border-slate-600">
                     <span>⚙️</span>
-                    <span x-text="apiKey ? 'API Key Terhubung' : 'Atur API Key Dulu'"></span>
+                    <span class="hidden sm:inline" x-text="apiKey ? 'API Key Terhubung' : 'Atur API Key Dulu'"></span>
+                    <span class="inline sm:hidden" x-text="apiKey ? 'Terhubung' : 'API Key'"></span>
                 </button>
             </div>
         </div>
     </header>
 
     <!-- KONTEN UTAMA -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- SIDEBAR MENU -->
+        <!-- SIDEBAR MENU (Bisa digeser/dropdown compact di HP) -->
         <div class="lg:col-span-3 space-y-4">
             
-            <!-- Menu Utama Arsip/Bank Materi -->
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-2 transition-colors duration-200">
-                <button @click="activeMenu = 'bank'" :class="activeMenu === 'bank' ? 'bg-emerald-600 text-white font-semibold shadow-xs' : 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50'" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm transition">
-                    <div class="flex items-center space-x-3">
-                        <span class="text-lg">📁</span>
-                        <span class="font-bold">Bank Materi / Arsip</span>
-                    </div>
-                    <span class="text-xs px-2 py-0.5 rounded-full bg-white/20 dark:bg-black/20" x-text="bankMateri.length"></span>
-                </button>
+            <!-- Tombol Dropdown Menu Khusus Tampilan HP -->
+            <div class="block lg:hidden bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs">
+                <label class="block text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Pilih Menu / Fitur:</label>
+                <select x-model="activeMenu" class="w-full text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 outline-none font-semibold">
+                    <option value="bank">📁 Bank Materi / Arsip (<span x-text="bankMateri.length"></span>)</option>
+                    <optgroup label="Perencanaan">
+                        <option value="modul">📝 Modul Ajar</option>
+                        <option value="rpp">📋 RPP / Perangkat</option>
+                        <option value="tp">🎯 Tujuan Pembelajaran</option>
+                    </optgroup>
+                    <optgroup label="Asesmen">
+                        <option value="kisi">📑 Kisi-Kisi Soal</option>
+                        <option value="soal">❓ Soal + Kunci Jawaban</option>
+                        <option value="rubrik">📊 Rubrik Penilaian</option>
+                    </optgroup>
+                    <optgroup label="Manajemen Kelas">
+                        <option value="rekap_nilai">📈 Analisis Rekap Nilai</option>
+                        <option value="surat">✉️ Generator Surat</option>
+                        <option value="agenda">🗓️ Jadwal & Agenda</option>
+                        <option value="jurnal">📖 Catatan Siswa (Jurnal)</option>
+                    </optgroup>
+                </select>
             </div>
 
-            <!-- Menu Perencanaan -->
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-2 transition-colors duration-200">
-                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Perencanaan</p>
-                
-                <button @click="activeMenu = 'modul'" :class="activeMenu === 'modul' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
-                    <span class="text-lg">📝</span>
-                    <span>Modul Ajar</span>
-                </button>
+            <!-- Sidebar Navigasi Normal (Tampil di Tablet/Desktop) -->
+            <div class="hidden lg:block space-y-4">
+                <!-- Menu Utama Arsip/Bank Materi -->
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-2 transition-colors duration-200">
+                    <button @click="activeMenu = 'bank'" :class="activeMenu === 'bank' ? 'bg-emerald-600 text-white font-semibold shadow-xs' : 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50'" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm transition">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-lg">📁</span>
+                            <span class="font-bold">Bank Materi / Arsip</span>
+                        </div>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-white/20 dark:bg-black/20" x-text="bankMateri.length"></span>
+                    </button>
+                </div>
 
-                <button @click="activeMenu = 'rpp'" :class="activeMenu === 'rpp' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
-                    <span class="text-lg">📋</span>
-                    <span>RPP / Perangkat</span>
-                </button>
+                <!-- Menu Perencanaan -->
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-2 transition-colors duration-200">
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Perencanaan</p>
+                    
+                    <button @click="activeMenu = 'modul'" :class="activeMenu === 'modul' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
+                        <span class="text-lg">📝</span>
+                        <span>Modul Ajar</span>
+                    </button>
 
-                <button @click="activeMenu = 'tp'" :class="activeMenu === 'tp' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
-                    <span class="text-lg">🎯</span>
-                    <span>Tujuan Pembelajaran</span>
-                </button>
-            </div>
+                    <button @click="activeMenu = 'rpp'" :class="activeMenu === 'rpp' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
+                        <span class="text-lg">📋</span>
+                        <span>RPP / Perangkat</span>
+                    </button>
 
-            <!-- Menu Asesmen & Evaluasi -->
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-2 transition-colors duration-200">
-                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Asesmen</p>
-                
-                <button @click="activeMenu = 'kisi'" :class="activeMenu === 'kisi' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
-                    <span class="text-lg">📑</span>
-                    <span>Kisi-Kisi Soal</span>
-                </button>
+                    <button @click="activeMenu = 'tp'" :class="activeMenu === 'tp' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
+                        <span class="text-lg">🎯</span>
+                        <span>Tujuan Pembelajaran</span>
+                    </button>
+                </div>
 
-                <button @click="activeMenu = 'soal'" :class="activeMenu === 'soal' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
-                    <span class="text-lg">❓</span>
-                    <span>Soal + Kunci Jawaban</span>
-                </button>
+                <!-- Menu Asesmen & Evaluasi -->
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-2 transition-colors duration-200">
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Asesmen</p>
+                    
+                    <button @click="activeMenu = 'kisi'" :class="activeMenu === 'kisi' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
+                        <span class="text-lg">📑</span>
+                        <span>Kisi-Kisi Soal</span>
+                    </button>
 
-                <button @click="activeMenu = 'rubrik'" :class="activeMenu === 'rubrik' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
-                    <span class="text-lg">📊</span>
-                    <span>Rubrik Penilaian</span>
-                </button>
-            </div>
+                    <button @click="activeMenu = 'soal'" :class="activeMenu === 'soal' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
+                        <span class="text-lg">❓</span>
+                        <span>Soal + Kunci Jawaban</span>
+                    </button>
 
-            <!-- Menu Manajemen Kelas -->
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-2 transition-colors duration-200">
-                <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Manajemen Kelas</p>
-                
-                <button @click="activeMenu = 'rekap_nilai'" :class="activeMenu === 'rekap_nilai' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
-                    <span class="text-lg">📈</span>
-                    <span>Analisis Rekap Nilai</span>
-                </button>
+                    <button @click="activeMenu = 'rubrik'" :class="activeMenu === 'rubrik' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
+                        <span class="text-lg">📊</span>
+                        <span>Rubrik Penilaian</span>
+                    </button>
+                </div>
 
-                <button @click="activeMenu = 'surat'" :class="activeMenu === 'surat' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
-                    <span class="text-lg">✉️</span>
-                    <span>Generator Surat</span>
-                </button>
+                <!-- Menu Manajemen Kelas -->
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-2 transition-colors duration-200">
+                    <p class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Manajemen Kelas</p>
+                    
+                    <button @click="activeMenu = 'rekap_nilai'" :class="activeMenu === 'rekap_nilai' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
+                        <span class="text-lg">📈</span>
+                        <span>Analisis Rekap Nilai</span>
+                    </button>
 
-                <button @click="activeMenu = 'agenda'" :class="activeMenu === 'agenda' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
-                    <span class="text-lg">🗓️</span>
-                    <span>Jadwal & Agenda</span>
-                </button>
+                    <button @click="activeMenu = 'surat'" :class="activeMenu === 'surat' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
+                        <span class="text-lg">✉️</span>
+                        <span>Generator Surat</span>
+                    </button>
 
-                <button @click="activeMenu = 'jurnal'" :class="activeMenu === 'jurnal' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
-                    <span class="text-lg">📖</span>
-                    <span>Catatan Siswa (Jurnal)</span>
-                </button>
+                    <button @click="activeMenu = 'agenda'" :class="activeMenu === 'agenda' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
+                        <span class="text-lg">🗓️</span>
+                        <span>Jadwal & Agenda</span>
+                    </button>
+
+                    <button @click="activeMenu = 'jurnal'" :class="activeMenu === 'jurnal' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 font-semibold border-emerald-200 dark:border-emerald-800' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 border-transparent'" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm border transition text-left">
+                        <span class="text-lg">📖</span>
+                        <span>Catatan Siswa (Jurnal)</span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -156,11 +184,11 @@
                 </div>
             </template>
 
-            <!-- KONTEN: BANK MATERI / ARSIP -->
-            <div x-show="activeMenu === 'bank'" class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-5 transition-colors duration-200">
-                <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4">
+            <!-- KONTEN: BANK MATERI / ARsip -->
+            <div x-show="activeMenu === 'bank'" class="bg-white dark:bg-slate-800 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-5 transition-colors duration-200">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-100 dark:border-slate-700 pb-4">
                     <div>
-                        <h2 class="font-bold text-slate-800 dark:text-white text-lg">📁 Bank Materi & Arsip Dokumen</h2>
+                        <h2 class="font-bold text-slate-800 dark:text-white text-base sm:text-lg">📁 Bank Materi & Arsip Dokumen</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Daftar seluruh dokumen perangkat ajar yang pernah Anda buat tersimpan di sini secara otomatis.</p>
                     </div>
                     <button @click="clearBank()" x-show="bankMateri.length > 0" class="text-xs bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-100 text-rose-600 dark:text-rose-400 px-3 py-2 rounded-xl font-medium transition border border-rose-200 dark:border-rose-900">🗑️ Kosongkan Arsip</button>
@@ -174,16 +202,16 @@
                     </div>
                 </template>
 
-                <div class="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+                <div class="space-y-4 max-h-[500px] sm:max-h-[600px] overflow-y-auto pr-1 sm:pr-2">
                     <template x-for="(item, index) in bankMateri" :key="item.id">
-                        <div class="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 p-4 rounded-2xl space-y-3">
-                            <div class="flex justify-between items-start">
+                        <div class="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 p-3 sm:p-4 rounded-2xl space-y-3">
+                            <div class="flex flex-col sm:flex-row justify-between items-start gap-3">
                                 <div>
                                     <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400" x-text="item.category"></span>
                                     <h3 class="font-bold text-slate-800 dark:text-white text-sm mt-2" x-text="item.title"></h3>
                                     <p class="text-xs text-slate-400 mt-0.5" x-text="item.date"></p>
                                 </div>
-                                <div class="flex items-center space-x-2">
+                                <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
                                     <button @click="bukaDariBank(item)" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-medium transition shadow-xs">👁️ Lihat / Unduh</button>
                                     <button @click="hapusItemBank(index)" class="text-xs bg-slate-200 dark:bg-slate-700 hover:bg-rose-100 hover:text-rose-600 dark:hover:bg-rose-950 dark:hover:text-rose-400 text-slate-600 dark:text-slate-300 p-1.5 rounded-lg transition" title="Hapus Arsip">❌</button>
                                 </div>
@@ -194,8 +222,8 @@
             </div>
 
             <!-- KONTEN: MODUL AJAR -->
-            <div x-show="activeMenu === 'modul'" class="grid grid-cols-1 md:grid-cols-12 gap-6" style="display: none;">
-                <div class="md:col-span-5 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
+            <div x-show="activeMenu === 'modul'" class="grid grid-cols-1 lg:grid-cols-12 gap-6" style="display: none;">
+                <div class="lg:col-span-5 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
                     <div>
                         <h2 class="font-bold text-slate-800 dark:text-white text-base">📝 Buat Modul Ajar</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Isi data singkat, AI akan menyusun modul ajar lengkap.</p>
@@ -223,21 +251,21 @@
                         <span x-show="loading">⏳ Sedang Menyusun Dokumen...</span>
                     </button>
                 </div>
-                <div class="md:col-span-7 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[600px] transition-colors duration-200">
-                    <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
+                <div class="lg:col-span-7 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[500px] sm:h-[600px] transition-colors duration-200">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-slate-800 dark:text-white text-sm">📄 Hasil Draf Modul Ajar</h3>
-                        <div class="flex items-center space-x-2" x-show="hasilAI">
-                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin Teks</button>
+                        <div class="flex items-center space-x-2 w-full sm:w-auto justify-end" x-show="hasilAI">
+                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin</button>
                             <button @click="downloadWord()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold transition shadow-xs">📥 Unduh .docx</button>
                         </div>
                     </div>
-                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Hasil draf modul ajar akan muncul di sini...</p>'"></div>
+                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Hasil draf modul ajar akan muncul di sini...</p>'"></div>
                 </div>
             </div>
 
             <!-- KONTEN: RPP -->
-            <div x-show="activeMenu === 'rpp'" class="grid grid-cols-1 md:grid-cols-12 gap-6" style="display: none;">
-                <div class="md:col-span-5 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
+            <div x-show="activeMenu === 'rpp'" class="grid grid-cols-1 lg:grid-cols-12 gap-6" style="display: none;">
+                <div class="lg:col-span-5 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
                     <div>
                         <h2 class="font-bold text-slate-800 dark:text-white text-base">📋 Buat RPP / Perangkat</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Rancangan kegiatan pembelajaran harian yang terstruktur.</p>
@@ -261,21 +289,21 @@
                         <span x-show="loading">⏳ Sedang Menyusun RPP...</span>
                     </button>
                 </div>
-                <div class="md:col-span-7 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[600px] transition-colors duration-200">
-                    <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
+                <div class="lg:col-span-7 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[500px] sm:h-[600px] transition-colors duration-200">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-slate-800 dark:text-white text-sm">📄 Hasil Draf RPP</h3>
-                        <div class="flex items-center space-x-2" x-show="hasilAI">
-                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin Teks</button>
+                        <div class="flex items-center space-x-2 w-full sm:w-auto justify-end" x-show="hasilAI">
+                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin</button>
                             <button @click="downloadWord()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold transition shadow-xs">📥 Unduh .docx</button>
                         </div>
                     </div>
-                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Hasil draf RPP akan muncul di sini...</p>'"></div>
+                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Hasil draf RPP akan muncul di sini...</p>'"></div>
                 </div>
             </div>
 
             <!-- KONTEN: TUJUAN PEMBELAJARAN (TP) -->
-            <div x-show="activeMenu === 'tp'" class="grid grid-cols-1 md:grid-cols-12 gap-6" style="display: none;">
-                <div class="md:col-span-5 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
+            <div x-show="activeMenu === 'tp'" class="grid grid-cols-1 lg:grid-cols-12 gap-6" style="display: none;">
+                <div class="lg:col-span-5 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
                     <div>
                         <h2 class="font-bold text-slate-800 dark:text-white text-base">🎯 Generator Tujuan Pembelajaran</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Turunkan Capaian Pembelajaran (CP) menjadi TP operasional.</p>
@@ -295,21 +323,21 @@
                         <span x-show="loading">⏳ Sedang Menganalisis...</span>
                     </button>
                 </div>
-                <div class="md:col-span-7 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[600px] transition-colors duration-200">
-                    <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
+                <div class="lg:col-span-7 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[500px] sm:h-[600px] transition-colors duration-200">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-slate-800 dark:text-white text-sm">📄 Hasil Rincian TP</h3>
-                        <div class="flex items-center space-x-2" x-show="hasilAI">
-                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin Teks</button>
+                        <div class="flex items-center space-x-2 w-full sm:w-auto justify-end" x-show="hasilAI">
+                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin</button>
                             <button @click="downloadWord()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold transition shadow-xs">📥 Unduh .docx</button>
                         </div>
                     </div>
-                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Hasil rumusan TP akan muncul di sini...</p>'"></div>
+                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Hasil rumusan TP akan muncul di sini...</p>'"></div>
                 </div>
             </div>
 
             <!-- KONTEN: KISI-KISI SOAL -->
-            <div x-show="activeMenu === 'kisi'" class="grid grid-cols-1 md:grid-cols-12 gap-6" style="display: none;">
-                <div class="md:col-span-5 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
+            <div x-show="activeMenu === 'kisi'" class="grid grid-cols-1 lg:grid-cols-12 gap-6" style="display: none;">
+                <div class="lg:col-span-5 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
                     <div>
                         <h2 class="font-bold text-slate-800 dark:text-white text-base">📑 Generator Kisi-Kisi Soal</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Buat tabel kisi-kisi atau unggah acuan materi/silabus.</p>
@@ -341,16 +369,16 @@
                         <template x-if="kisiMode === 'upload'">
                             <div class="space-y-3">
                                 <div>
-                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Unggah Dokumen Acuan (PDF/Word/Excel/Gambar)</label>
-                                    <input type="file" @change="handleFileUpload($event, 'kisi')" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 dark:file:bg-emerald-950 file:text-emerald-700 dark:file:text-emerald-400 hover:file:bg-emerald-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2">
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Unggah Dokumen Acuan (PDF/Word/Gambar)</label>
+                                    <input type="file" @change="handleFileUpload($event, 'kisi')" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 dark:file:bg-emerald-950 file:text-emerald-700 dark:file:text-emerald-400 hover:file:bg-emerald-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2">
                                 </div>
-                                <div class="text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                                    <span class="font-semibold text-slate-700 dark:text-slate-300">File terpilih:</span> 
+                                <div class="text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700 truncate">
+                                    <span class="font-semibold text-slate-700 dark:text-slate-300">File:</span> 
                                     <span x-text="kisiFileName ? kisiFileName : 'Belum ada file dipilih'"></span>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Catatan / Instruksi Tambahan (Opsional)</label>
-                                    <input type="text" x-model="formKisi.catatanUpload" placeholder="Contoh: Buatkan format kisi-kisi Kurikulum Merdeka" class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-emerald-500">
+                                    <input type="text" x-model="formKisi.catatanUpload" placeholder="Contoh: Format Kurikulum Merdeka" class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-emerald-500">
                                 </div>
                             </div>
                         </template>
@@ -361,21 +389,21 @@
                         <span x-show="loading">⏳ Sedang Menyusun Kisi-Kisi...</span>
                     </button>
                 </div>
-                <div class="md:col-span-7 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[600px] transition-colors duration-200">
-                    <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
+                <div class="lg:col-span-7 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[500px] sm:h-[600px] transition-colors duration-200">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-slate-800 dark:text-white text-sm">📄 Hasil Tabel Kisi-Kisi</h3>
-                        <div class="flex items-center space-x-2" x-show="hasilAI">
-                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin Teks</button>
+                        <div class="flex items-center space-x-2 w-full sm:w-auto justify-end" x-show="hasilAI">
+                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin</button>
                             <button @click="downloadWord()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold transition shadow-xs">📥 Unduh .docx</button>
                         </div>
                     </div>
-                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Tabel kisi-kisi soal akan muncul di sini...</p>'"></div>
+                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Tabel kisi-kisi soal akan muncul di sini...</p>'"></div>
                 </div>
             </div>
 
             <!-- KONTEN: SOAL + KUNCI JAWABAN -->
-            <div x-show="activeMenu === 'soal'" class="grid grid-cols-1 md:grid-cols-12 gap-6" style="display: none;">
-                <div class="md:col-span-5 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
+            <div x-show="activeMenu === 'soal'" class="grid grid-cols-1 lg:grid-cols-12 gap-6" style="display: none;">
+                <div class="lg:col-span-5 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
                     <div>
                         <h2 class="font-bold text-slate-800 dark:text-white text-base">❓ Generator Soal & Kunci Jawaban</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Buat paket soal dari topik manual atau unggah file kisi-kisi.</p>
@@ -383,7 +411,7 @@
                     
                     <div class="space-y-3">
                         <div class="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-xl text-xs font-semibold">
-                            <button @click="soalMode = 'manual'" :class="soalMode === 'manual' ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-white shadow-xs' : 'text-slate-500 dark:text-slate-400'" class="flex-1 py-2 rounded-lg transition">Ketik Topik Manual</button>
+                            <button @click="soalMode = 'manual'" :class="soalMode === 'manual' ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-white shadow-xs' : 'text-slate-500 dark:text-slate-400'" class="flex-1 py-2 rounded-lg transition">Ketik Manual</button>
                             <button @click="soalMode = 'upload'" :class="soalMode === 'upload' ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-white shadow-xs' : 'text-slate-500 dark:text-slate-400'" class="flex-1 py-2 rounded-lg transition">📁 Unggah Kisi-Kisi</button>
                         </div>
 
@@ -395,7 +423,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Topik Bahasan</label>
-                                    <input type="text" x-model="formSoal.topik" placeholder="Contoh: Kolonialisme dan Imperialisme" class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-emerald-500">
+                                    <input type="text" x-model="formSoal.topik" placeholder="Contoh: Kolonialisme" class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-emerald-500">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Jenis & Jumlah Soal</label>
@@ -408,10 +436,10 @@
                             <div class="space-y-3">
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Unggah Dokumen Kisi-Kisi</label>
-                                    <input type="file" @change="handleFileUpload($event, 'soal')" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 dark:file:bg-emerald-950 file:text-emerald-700 dark:file:text-emerald-400 hover:file:bg-emerald-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2">
+                                    <input type="file" @change="handleFileUpload($event, 'soal')" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 dark:file:bg-emerald-950 file:text-emerald-700 dark:file:text-emerald-400 hover:file:bg-emerald-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2">
                                 </div>
-                                <div class="text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                                    <span class="font-semibold text-slate-700 dark:text-slate-300">File terpilih:</span> 
+                                <div class="text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700 truncate">
+                                    <span class="font-semibold text-slate-700 dark:text-slate-300">File:</span> 
                                     <span x-text="soalFileName ? soalFileName : 'Belum ada file dipilih'"></span>
                                 </div>
                                 <div>
@@ -427,21 +455,21 @@
                         <span x-show="loading">⏳ Sedang Merumuskan Soal...</span>
                     </button>
                 </div>
-                <div class="md:col-span-7 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[600px] transition-colors duration-200">
-                    <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
+                <div class="lg:col-span-7 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[500px] sm:h-[600px] transition-colors duration-200">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-slate-800 dark:text-white text-sm">📄 Hasil Paket Soal</h3>
-                        <div class="flex items-center space-x-2" x-show="hasilAI">
-                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin Teks</button>
+                        <div class="flex items-center space-x-2 w-full sm:w-auto justify-end" x-show="hasilAI">
+                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin</button>
                             <button @click="downloadWord()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold transition shadow-xs">📥 Unduh .docx</button>
                         </div>
                     </div>
-                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Paket soal dan kunci jawaban akan muncul di sini...</p>'"></div>
+                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Paket soal dan kunci jawaban akan muncul di sini...</p>'"></div>
                 </div>
             </div>
 
             <!-- KONTEN: RUBRIK PENILAIAN -->
-            <div x-show="activeMenu === 'rubrik'" class="grid grid-cols-1 md:grid-cols-12 gap-6" style="display: none;">
-                <div class="md:col-span-5 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
+            <div x-show="activeMenu === 'rubrik'" class="grid grid-cols-1 lg:grid-cols-12 gap-6" style="display: none;">
+                <div class="lg:col-span-5 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
                     <div>
                         <h2 class="font-bold text-slate-800 dark:text-white text-base">📊 Generator Rubrik Penilaian</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Buat pedoman penskoran tugas unjuk kerja atau presentasi.</p>
@@ -453,7 +481,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Aspek yang Dinilai</label>
-                            <input type="text" x-model="formRubrik.aspek" placeholder="Contoh: Ketepatan prosedur, kebersihan lab, laporan" class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input type="text" x-model="formRubrik.aspek" placeholder="Contoh: Ketepatan prosedur, laporan" class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-emerald-500">
                         </div>
                     </div>
                     <button @click="generateAI('rubrik')" :disabled="loading || !apiKey" class="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-200 dark:disabled:bg-slate-700 text-white font-semibold text-sm py-3 rounded-xl transition shadow-xs flex justify-center items-center space-x-2">
@@ -461,21 +489,21 @@
                         <span x-show="loading">⏳ Menyusun Rubrik...</span>
                     </button>
                 </div>
-                <div class="md:col-span-7 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[600px] transition-colors duration-200">
-                    <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
+                <div class="lg:col-span-7 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[500px] sm:h-[600px] transition-colors duration-200">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-slate-800 dark:text-white text-sm">📄 Hasil Rubrik Penilaian</h3>
-                        <div class="flex items-center space-x-2" x-show="hasilAI">
-                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin Teks</button>
+                        <div class="flex items-center space-x-2 w-full sm:w-auto justify-end" x-show="hasilAI">
+                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin</button>
                             <button @click="downloadWord()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold transition shadow-xs">📥 Unduh .docx</button>
                         </div>
                     </div>
-                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Rubrik penilaian akan muncul di sini...</p>'"></div>
+                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Rubrik penilaian akan muncul di sini...</p>'"></div>
                 </div>
             </div>
 
             <!-- ANALISIS REKAP NILAI -->
-            <div x-show="activeMenu === 'rekap_nilai'" class="grid grid-cols-1 md:grid-cols-12 gap-6" style="display: none;">
-                <div class="md:col-span-5 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
+            <div x-show="activeMenu === 'rekap_nilai'" class="grid grid-cols-1 lg:grid-cols-12 gap-6" style="display: none;">
+                <div class="lg:col-span-5 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
                     <div>
                         <h2 class="font-bold text-slate-800 dark:text-white text-base">📈 Analisis Rekap Nilai Siswa</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Ketik manual atau unggah file rekap nilai (Excel/CSV/PDF).</p>
@@ -483,8 +511,8 @@
 
                     <div class="space-y-3">
                         <div class="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-xl text-xs font-semibold">
-                            <button @click="rekapMode = 'manual'" :class="rekapMode === 'manual' ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-white shadow-xs' : 'text-slate-500 dark:text-slate-400'" class="flex-1 py-2 rounded-lg transition">Ketik Teks Manual</button>
-                            <button @click="rekapMode = 'upload'" :class="rekapMode === 'upload' ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-white shadow-xs' : 'text-slate-500 dark:text-slate-400'" class="flex-1 py-2 rounded-lg transition">📁 Unggah File Nilai</button>
+                            <button @click="rekapMode = 'manual'" :class="rekapMode === 'manual' ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-white shadow-xs' : 'text-slate-500 dark:text-slate-400'" class="flex-1 py-2 rounded-lg transition">Ketik Teks</button>
+                            <button @click="rekapMode = 'upload'" :class="rekapMode === 'upload' ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-white shadow-xs' : 'text-slate-500 dark:text-slate-400'" class="flex-1 py-2 rounded-lg transition">📁 Unggah File</button>
                         </div>
 
                         <template x-if="rekapMode === 'manual'">
@@ -504,15 +532,15 @@
                             <div class="space-y-3">
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Unggah Rekap Nilai (Excel/CSV/PDF/Word)</label>
-                                    <input type="file" @change="handleFileUpload($event, 'rekap')" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.png,.jpg,.jpeg" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 dark:file:bg-emerald-950 file:text-emerald-700 dark:file:text-emerald-400 hover:file:bg-emerald-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2">
+                                    <input type="file" @change="handleFileUpload($event, 'rekap')" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.png,.jpg,.jpeg" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 dark:file:bg-emerald-950 file:text-emerald-700 dark:file:text-emerald-400 hover:file:bg-emerald-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2">
                                 </div>
-                                <div class="text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                                    <span class="font-semibold text-slate-700 dark:text-slate-300">File terpilih:</span> 
+                                <div class="text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700 truncate">
+                                    <span class="font-semibold text-slate-700 dark:text-slate-300">File:</span> 
                                     <span x-text="rekapFileName ? rekapFileName : 'Belum ada file dipilih'"></span>
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Mata Pelajaran & Keterangan (Opsional)</label>
-                                    <input type="text" x-model="formRekap.catatanUpload" placeholder="Contoh: Nilai Sumatif Fisika Kelas 11" class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-emerald-500">
+                                    <input type="text" x-model="formRekap.catatanUpload" placeholder="Contoh: Nilai Sumatif Fisika" class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-emerald-500">
                                 </div>
                             </div>
                         </template>
@@ -523,21 +551,21 @@
                         <span x-show="loading">⏳ Sedang Menghitung & Menganalisis...</span>
                     </button>
                 </div>
-                <div class="md:col-span-7 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[600px] transition-colors duration-200">
-                    <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
+                <div class="lg:col-span-7 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[500px] sm:h-[600px] transition-colors duration-200">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-slate-800 dark:text-white text-sm">📄 Hasil Analisis & Rekapitulasi</h3>
-                        <div class="flex items-center space-x-2" x-show="hasilAI">
-                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin Teks</button>
+                        <div class="flex items-center space-x-2 w-full sm:w-auto justify-end" x-show="hasilAI">
+                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin</button>
                             <button @click="downloadWord()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold transition shadow-xs">📥 Unduh .docx</button>
                         </div>
                     </div>
-                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Hasil analisis rekap nilai kelas akan muncul di sini...</p>'"></div>
+                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Hasil analisis rekap nilai kelas akan muncul di sini...</p>'"></div>
                 </div>
             </div>
 
             <!-- GENERATOR SURAT -->
-            <div x-show="activeMenu === 'surat'" class="grid grid-cols-1 md:grid-cols-12 gap-6" style="display: none;">
-                <div class="md:col-span-5 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
+            <div x-show="activeMenu === 'surat'" class="grid grid-cols-1 lg:grid-cols-12 gap-6" style="display: none;">
+                <div class="lg:col-span-5 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
                     <div>
                         <h2 class="font-bold text-slate-800 dark:text-white text-base">✉️ Generator Surat Resmi Sekolah</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Buat surat panggilan orang tua, izin siswa, atau keterangan mengajar.</p>
@@ -557,21 +585,21 @@
                         <span x-show="loading">⏳ Sedang Menyusun Surat...</span>
                     </button>
                 </div>
-                <div class="md:col-span-7 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[600px] transition-colors duration-200">
-                    <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
+                <div class="lg:col-span-7 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[500px] sm:h-[600px] transition-colors duration-200">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-slate-800 dark:text-white text-sm">📄 Hasil Draf Surat</h3>
-                        <div class="flex items-center space-x-2" x-show="hasilAI">
-                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin Teks</button>
+                        <div class="flex items-center space-x-2 w-full sm:w-auto justify-end" x-show="hasilAI">
+                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin</button>
                             <button @click="downloadWord()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold transition shadow-xs">📥 Unduh .docx</button>
                         </div>
                     </div>
-                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Draf surat resmi akan muncul di sini...</p>'"></div>
+                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Draf surat resmi akan muncul di sini...</p>'"></div>
                 </div>
             </div>
 
             <!-- JADWAL & AGENDA -->
-            <div x-show="activeMenu === 'agenda'" class="grid grid-cols-1 md:grid-cols-12 gap-6" style="display: none;">
-                <div class="md:col-span-5 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
+            <div x-show="activeMenu === 'agenda'" class="grid grid-cols-1 lg:grid-cols-12 gap-6" style="display: none;">
+                <div class="lg:col-span-5 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
                     <div>
                         <h2 class="font-bold text-slate-800 dark:text-white text-base">🗓️ Jadwal & Agenda Pembelajaran</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Susun jadwal mengajar mingguan atau agenda kegiatan proyek kelas.</p>
@@ -579,7 +607,7 @@
                     <div class="space-y-3">
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Cakupan Waktu & Kegiatan</label>
-                            <input type="text" x-model="formAgenda.waktu" placeholder="Contoh: Jadwal Mengajar 1 Minggu Kelas 12" class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input type="text" x-model="formAgenda.waktu" placeholder="Contoh: Jadwal Mengajar 1 Minggu" class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-emerald-500">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Catatan / Mata Pelajaran Pendukung</label>
@@ -591,21 +619,21 @@
                         <span x-show="loading">⏳ Menyusun Jadwal Terstruktur...</span>
                     </button>
                 </div>
-                <div class="md:col-span-7 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[600px] transition-colors duration-200">
-                    <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
+                <div class="lg:col-span-7 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[500px] sm:h-[600px] transition-colors duration-200">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-slate-800 dark:text-white text-sm">📄 Hasil Jadwal & Agenda</h3>
-                        <div class="flex items-center space-x-2" x-show="hasilAI">
-                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin Teks</button>
+                        <div class="flex items-center space-x-2 w-full sm:w-auto justify-end" x-show="hasilAI">
+                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin</button>
                             <button @click="downloadWord()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold transition shadow-xs">📥 Unduh .docx</button>
                         </div>
                     </div>
-                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Jadwal dan agenda akan muncul di sini...</p>'"></div>
+                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Jadwal dan agenda akan muncul di sini...</p>'"></div>
                 </div>
             </div>
 
             <!-- CATATAN SISWA -->
-            <div x-show="activeMenu === 'jurnal'" class="grid grid-cols-1 md:grid-cols-12 gap-6" style="display: none;">
-                <div class="md:col-span-5 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
+            <div x-show="activeMenu === 'jurnal'" class="grid grid-cols-1 lg:grid-cols-12 gap-6" style="display: none;">
+                <div class="lg:col-span-5 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs space-y-4 transition-colors duration-200">
                     <div>
                         <h2 class="font-bold text-slate-800 dark:text-white text-base">📖 Jurnal Catatan Perkembangan Siswa</h2>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Buat catatan anekdotal sikap berdasarkan Profil Pelajar Pancasila.</p>
@@ -613,7 +641,7 @@
                     <div class="space-y-3">
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Nama Siswa & Kejadian / Catatan</label>
-                            <input type="text" x-model="formJurnal.siswa" placeholder="Contoh: Dimas - Kreatif dalam membuat proyek infografis" class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-emerald-500">
+                            <input type="text" x-model="formJurnal.siswa" placeholder="Contoh: Dimas - Kreatif dalam proyek" class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 outline-none focus:ring-2 focus:ring-emerald-500">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Dimensi Profil Pelajar Pancasila / Aspek Sikap</label>
@@ -625,15 +653,15 @@
                         <span x-show="loading">⏳ Menyusun Catatan Perkembangan...</span>
                     </button>
                 </div>
-                <div class="md:col-span-7 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[600px] transition-colors duration-200">
-                    <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
+                <div class="lg:col-span-7 bg-white dark:bg-slate-800 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-xs flex flex-col h-[500px] sm:h-[600px] transition-colors duration-200">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
                         <h3 class="font-bold text-slate-800 dark:text-white text-sm">📄 Hasil Jurnal Catatan Siswa</h3>
-                        <div class="flex items-center space-x-2" x-show="hasilAI">
-                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin Teks</button>
+                        <div class="flex items-center space-x-2 w-full sm:w-auto justify-end" x-show="hasilAI">
+                            <button @click="salinTeks()" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 px-3 py-1.5 rounded-lg font-medium transition text-slate-600 dark:text-slate-300">📋 Salin</button>
                             <button @click="downloadWord()" class="text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-semibold transition shadow-xs">📥 Unduh .docx</button>
                         </div>
                     </div>
-                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Catatan perkembangan siswa akan muncul di sini...</p>'"></div>
+                    <div class="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-sm leading-relaxed overflow-y-auto ai-result-content" x-html="hasilAI ? marked.parse(hasilAI) : '<p class=\'text-slate-400 dark:text-slate-500\'>Catatan perkembangan siswa akan muncul di sini...</p>'"></div>
                 </div>
             </div>
 
@@ -642,22 +670,25 @@
 
     <!-- MODAL PENGATURAN API KEY -->
     <div x-show="openModalKey" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50" style="display: none;">
-        <div @click.outside="openModalKey = false" class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg p-6 sm:p-8 space-y-5 shadow-2xl border border-slate-100 dark:border-slate-700 transition-colors duration-200">
+        <div @click.outside="openModalKey = false" class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl border border-slate-100 dark:border-slate-700 transition-colors duration-200">
             <div>
                 <h3 class="font-bold text-xl text-slate-800 dark:text-white">🔑 Pengaturan API Key Gemini</h3>
                 <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-                    Aplikasi ini berjalan mandiri di browser Anda. API Key Anda disimpan aman di perangkat Anda sendiri (Local Storage).
+                    Aplikasi ini berjalan mandiri di browser HP Anda. API Key Anda disimpan aman di penyimpanan lokal perangkat Anda.
                 </p>
             </div>
 
             <div class="space-y-3">
                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Masukkan Google Gemini API Key Anda</label>
-                <input type="password" x-model="tempApiKey" placeholder="AIzaSy..." class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-3 outline-none focus:ring-2 focus:ring-emerald-500 font-mono">
+                <div class="relative flex items-center">
+                    <input :type="showKey ? 'text' : 'password'" x-model="tempApiKey" placeholder="AIzaSy..." class="w-full text-sm bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700 rounded-xl p-3 pr-12 outline-none focus:ring-2 focus:ring-emerald-500 font-mono">
+                    <button @click="showKey = !showKey" type="button" class="absolute right-3 text-xs text-slate-500 font-semibold p-1" x-text="showKey ? 'Sembunyi' : 'Lihat'"></button>
+                </div>
                 
                 <div class="bg-slate-50 dark:bg-slate-900/50 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400 space-y-1">
                     <p class="font-semibold text-slate-700 dark:text-slate-300">Belum punya API Key?</p>
                     <ol class="list-decimal list-inside space-y-1 text-slate-500 dark:text-slate-400">
-                        <li>Buka <a href="https://aistudio.google.com/" target="_blank" class="text-emerald-600 dark:text-emerald-400 underline font-medium">Google AI Studio</a>.</li>
+                        <li>Buka <a href="https://aistudio.google.com/" target="_blank" class="text-emerald-600 dark:text-emerald-400 underline font-medium">Google AI Studio</a> lewat browser HP.</li>
                         <li>Masuk dengan akun Google dan buat API key baru.</li>
                     </ol>
                 </div>
@@ -678,6 +709,7 @@
                 activeMenu: 'modul',
                 apiKey: localStorage.getItem('guru_tools_gemini_key') || '',
                 tempApiKey: '',
+                showKey: false,
                 loading: false,
                 hasilAI: '',
                 darkMode: localStorage.getItem('guru_tools_dark_mode') === 'true',
@@ -727,7 +759,7 @@
                     tempDiv.innerHTML = marked.parse(this.hasilAI);
                     const plainText = tempDiv.textContent || tempDiv.innerText || '';
                     navigator.clipboard.writeText(plainText);
-                    alert('Berhasil menyalin hasil ke clipboard! Siap ditempel (paste) di Microsoft Word.');
+                    alert('Berhasil menyalin hasil ke clipboard!');
                 },
 
                 downloadWord() {
