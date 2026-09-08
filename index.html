@@ -963,6 +963,8 @@
                             this.hasilAI = data.candidates[0].content.parts[0].text;
                             // Simpan otomatis ke Bank Materi
                             this.simpanKeBank(type.toUpperCase(), categoryTitle, this.hasilAI);
+                        } else if (data.error) {
+                            this.hasilAI = `Gagal memproses dari server AI: ${data.error.message || 'Kesalahan tidak diketahui'}`;
                         } else {
                             this.hasilAI = 'Gagal memproses dokumen. Periksa kembali API Key atau data yang dimasukkan.';
                         }
